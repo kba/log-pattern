@@ -1,5 +1,5 @@
 {
-  "name": "log-pattern-formatter",
+  "name": "log-pattern",
   "version": "0.0.1",
   "description": "Pattern-defined log formatter",
   "main": "lib/formatter.js",
@@ -21,7 +21,7 @@
     "chalk": "^1.1.1",
     "cycle": "^1.0.3",
     "dateformat": "^1.0.12",
-    "find-up": "^1.1.0",
+    "read-pkg-up": "^1.0.1",
     "uniq": "^1.0.1"
   },
   "devDependencies": {

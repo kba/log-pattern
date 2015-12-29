@@ -2,7 +2,7 @@ test = require('tape')
 PatternFormatter = require '../lib/formatter'
 Path = require 'path'
 Winston = require 'winston'
-PACKAGE_JSON = require(require('find-up').sync('package.json'))
+PACKAGE_JSON = require('read-pkg-up').sync().pkg
 
 fmt = (pat, args...) -> 
 	patFmt = new PatternFormatter(pattern: pat, filename: __filename, winston: Winston)

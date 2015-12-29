@@ -1,6 +1,6 @@
 Path = require 'path'
 ChildProcess = require 'child_process'
-FindUp = require 'find-up'
+ReadPkgUp = require 'read-pkg-up'
 Fs = require 'fs'
 
 _find_parent_dir = (root, check) ->
@@ -18,8 +18,7 @@ module.exports.push
 	requires_arg: true
 	requires_config: ['filename']
 	setup: ->
-		path = FindUp.sync('package.json', cwd: @config.filename)
-		pkgjson = require path
+		pkgjson = ReadPkgUp.sync(cwd: @config.filename).pkg
 		@precomputed = pkgjson[@arg]
 
 module.exports.push
