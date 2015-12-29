@@ -3,10 +3,11 @@ Chalk = require 'chalk'
 Winston = require 'winston'
 
 PatternParser = require './parser'
-Macros = require './macros'
+DefaultMacros = require './macros'
 
 PRESETS = 
-	'default': '[%level] %message'
+	'default': '[%level] %message %meta'
+	'colored': '[%levelHighlight(%uc(%level))] - %date - %path{name} %message'
 
 module.exports = class PatternFormatter
 
@@ -14,21 +15,25 @@ module.exports = class PatternFormatter
 		if not @config.pattern
 			@config.preset or= 'default'
 			@config.pattern = PRESETS[@config.preset]
-		@loadMacros()
-		@loadPattern()
+		@_loadMacros()
+		@_loadPattern()
 
-	loadMacros : ->
-		@macros = Macros
+	_loadMacros : ->
+		@macros = DefaultMacros
 		@macros[macro.name] = macro for macro in @config.macros?
 		return @macros
 
-	loadPattern: (patfmt) ->
+	_loadPattern: (patfmt) ->
 		patfmt or= @config.pattern
-		_tree = PatternParser.parse(patfmt, Macros)
+		_tree = PatternParser.parse(patfmt, @macros)
 		@tree = PatternParser.traverse _tree, (node) =>
 			return if typeof node isnt 'object'
 			try
-				node.macro = @macros[node.name](node, @config.module)
+				node.macro = @macros[node.name].instance {
+					node: node,
+					filename: @config.filename
+					winston: @config.winston
+				}
 			catch e
 				console.error PatternParser.errorAtPos(@config.pattern, node.pos)
 				throw e
