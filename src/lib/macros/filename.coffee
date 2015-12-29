@@ -15,18 +15,18 @@ module.exports = []
 
 module.exports.push
 	name: 'pkg'
-	must_arg: true
-	must_module: true
+	requires_arg: true
+	requires_filename: true
 	setup: ->
-		pkgjson = FindPackageJson(@module.filename).next()
+		pkgjson = FindPackageJson(@filename).next()
 		@precomputed = pkgjson.value[@arg]
 
 module.exports.push
 	name: 'git-rev'
-	must_module: true
+	requires_filename: true
 
 	setup: ->
-		gitdir = _find_parent_dir @module.filename, '.git'
+		gitdir = _find_parent_dir @filename, '.git'
 		rev = ChildProcess.execSync "git log -1 --pretty=format:%h", {
 			cwd: gitdir
 			encoding: 'ascii'
@@ -35,12 +35,12 @@ module.exports.push
 
 module.exports.push
 	name: 'path'
-	can_arg: true
-	must_module: true
+	accepts_arg: true
+	requires_filename: true
 	setup: ->
-		@arg or= 'basename'
+		@arg or= 'name'
 		@precomputed = @arg
-		tokens = Path.parse(@module.filename)
-		for k,v of tokens
-			@precomputed = @precomputed.replace(k, v)
+		tokens = Path.parse(@filename)
+		for k in Object.keys(tokens).sort((a,b) -> a.length - b.length)
+			@precomputed = @precomputed.replace(k, tokens[k])
 

@@ -1,7 +1,8 @@
 Fs = require 'fs'
 Path = require 'path'
-Macro = require '../macro'
+MacroBuilder = require('../macro')
 
+conflicts = {}
 module.exports = {}
 for mod_name in Fs.readdirSync Path.join(__dirname)
 	macro_set = Path.parse(mod_name).name
@@ -9,5 +10,5 @@ for mod_name in Fs.readdirSync Path.join(__dirname)
 		if macro.name of module.exports
 			throw new Error("Duplicate definition of #{opts.name} in macro macro_set #{macro_set}")
 		macro.macro_set = macro_set
-		module.exports[macro.name] = Macro.create(macro)
+		module.exports[macro.name] = new MacroBuilder(macro)
 
