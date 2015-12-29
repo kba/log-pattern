@@ -4,28 +4,28 @@
   "description": "Pattern-defined log formatter",
   "main": "lib/formatter.js",
   "scripts": {
-    "test": "coffee test/test-macros.coffee",
+    "test": "make test && tape test/test-macros.js",
     "prepublish": "make"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kba/winston-patfmt.git"
+    "url": "git+https://github.com/kba/log-pattern.git"
   },
   "author": "kba",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kba/winston-patfmt/issues"
+    "url": "https://github.com/kba/log-pattern/issues"
   },
-  "homepage": "https://github.com/kba/winston-patfmt#readme",
+  "homepage": "https://github.com/kba/log-pattern#readme",
   "dependencies": {
     "chalk": "^1.1.1",
     "cycle": "^1.0.3",
     "dateformat": "^1.0.12",
-    "find-package-json": "^1.0.0",
-    "uniq": "^1.0.1",
-    "winston": "^2.1.1"
+    "find-up": "^1.1.0",
+    "uniq": "^1.0.1"
   },
   "devDependencies": {
-    "tape": "^4.4.0"
+    "tape": "^4.4.0",
+    "winston": "^2.1.1"
   }
 }
