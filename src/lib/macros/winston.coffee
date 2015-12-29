@@ -1,9 +1,14 @@
-{ parseColor, splitCommaEquals } = require '../utils'
+Utils = require '../utils'
 
 module.exports = []
 module.exports.push
 	name: 'level'
 	exec: (options) -> options.level
+module.exports.push
+	name: 'label'
+	exec: (options) ->
+		console.log arguments
+		options.label
 module.exports.push
 	name: 'LEVEL'
 	exec: (options) ->
@@ -19,18 +24,18 @@ module.exports.push
 module.exports.push
 	name: 'levelColor'
 	requires_inner: yes
-	requires_winston: yes
+	requires_config: ['winston']
 	accepts_arg: yes
 	setup : ->
 		if @arg
-			def = splitCommaEquals @arg
+			def = Utils.splitCommaEquals @arg
 			for level,styles of def
-				def[level] = parseColor styles
+				def[level] = Utils.parseColor styles
 			@_colorize = (level, inner) ->
 				return inner unless level of def
 				return def[level] inner
-		else if 'winston' of @
-			@_colorize = @winston.config.colorize
+		else if 'winston' of @config
+			@_colorize = @config.winston.config.colorize
 		else 
 			@throw_error "No level-color mapping!"
 	exec: (options, inner) ->

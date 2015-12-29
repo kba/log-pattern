@@ -1,6 +1,4 @@
-Winston = require 'winston'
-
-{parseColor} = require '../utils'
+Utils = require '../utils'
 
 module.exports = []
 module.exports.push
@@ -9,7 +7,7 @@ module.exports.push
 	requires_arg: yes
 	setup: ->
 		try
-			@_colorize = parseColor(@arg)
+			@_colorize = Utils.parseColor(@arg)
 		catch e
 			@throw_error(e)
 	exec: (options, inner) ->

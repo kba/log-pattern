@@ -1,6 +1,6 @@
 Path = require 'path'
 ChildProcess = require 'child_process'
-FindPackageJson = require 'find-package-json'
+FindUp = require 'find-up'
 Fs = require 'fs'
 
 _find_parent_dir = (root, check) ->
@@ -16,17 +16,17 @@ module.exports = []
 module.exports.push
 	name: 'pkg'
 	requires_arg: true
-	requires_filename: true
+	requires_config: ['filename']
 	setup: ->
-		pkgjson = FindPackageJson(@filename).next()
-		@precomputed = pkgjson.value[@arg]
+		path = FindUp.sync('package.json', cwd: @config.filename)
+		pkgjson = require path
+		@precomputed = pkgjson[@arg]
 
 module.exports.push
 	name: 'git-rev'
-	requires_filename: true
-
+	requires_config: ['filename']
 	setup: ->
-		gitdir = _find_parent_dir @filename, '.git'
+		gitdir = _find_parent_dir @config.filename, '.git'
 		rev = ChildProcess.execSync "git log -1 --pretty=format:%h", {
 			cwd: gitdir
 			encoding: 'ascii'
@@ -36,11 +36,11 @@ module.exports.push
 module.exports.push
 	name: 'path'
 	accepts_arg: true
-	requires_filename: true
+	requires_config: ['filename']
 	setup: ->
 		@arg or= 'name'
 		@precomputed = @arg
-		tokens = Path.parse(@filename)
+		tokens = Path.parse(@config.filename)
 		for k in Object.keys(tokens).sort((a,b) -> a.length - b.length)
 			@precomputed = @precomputed.replace(k, tokens[k])
 

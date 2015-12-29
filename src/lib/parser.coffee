@@ -100,7 +100,7 @@ module.exports =
 					elem.children[elem.children.length - 1] += str
 
 			if cur is MACRO_SIGIL
-				i += __add_child(name: _find_macro(macros, str, i+1), pos: i).name.length
+				i += __add_child(name: _find_macro(macros, str, i+1), pos: i+1).name.length
 			else if cur is OPEN_PARSE and
 			typeof __last_child() is 'object' and
 			not(__last_child().children and __last_child().conditions)

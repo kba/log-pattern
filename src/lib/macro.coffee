@@ -9,8 +9,7 @@ module.exports = class MacroBuilder
 	accepts_arg: false
 	requires_arg: false
 
-	requires_filename: false
-	requires_winston: false
+	requires_config: []
 
 	is_condition: false
 	
@@ -21,8 +20,7 @@ module.exports = class MacroBuilder
 		'requires_inner'
 		'accepts_arg'
 		'requires_arg'
-		'requires_filename'
-		'requires_winston'
+		'requires_config'
 		'is_condition'
 		'setup'
 		'exec'
@@ -49,14 +47,15 @@ module.exports = class MacroBuilder
 	instance: (opts={}) ->
 		if not opts.node
 			throw new Error("Must pass 'node' to Macro instance.")
+		opts.config or= {}
 		if not @accepts_arg   and opts.node.arg            then @throw_error("takes no argument")
 		if @requires_arg      and not opts.node.arg        then @throw_error("requires argument")
 		if not @accepts_inner and opts.node.children       then @throw_error("takes no inner")
 		if @requires_inner    and not opts.node.children   then @throw_error("requires inner")
 		if @is_condition      and not opts.node.conditions then @throw_error("requires condition")
 		if not @is_condition  and opts.node.conditions     then @throw_error("takes no condition")
-		if @requires_filename and not opts.filename       then @throw_error("requires filename")
-		if @requires_winston and not opts.winston       then @throw_error("requires winston")
+		for config_opt in @requires_config
+			if not opts.config[config_opt] then @throw_error("requires config.#{config_opt}")
 		return new Macro(@, opts)
 
 	throw_error: (msg) ->
@@ -74,8 +73,7 @@ Macro = class Macro
 	constructor: (builder, opts) ->
 		@[k] = builder[k] for k of builder
 		@arg = opts.node.arg
-		@filename = opts.filename
-		@winston = opts.winston
+		@config = opts.config
 		@setup()
 		if @precomputed
 			@exec = builder.default_exec

@@ -1,13 +1,12 @@
 'use strict'
 Chalk = require 'chalk'
-Winston = require 'winston'
 
 PatternParser = require './parser'
 DefaultMacros = require './macros'
 
 PRESETS = 
 	'default': '[%level] %message %meta'
-	'colored': '[%levelHighlight(%uc(%level))] - %date - %path{name} %message'
+	'colored': '[%levelColor(%uc(%level))] - %date - %path{name} %message'
 
 module.exports = class PatternFormatter
 
@@ -30,9 +29,8 @@ module.exports = class PatternFormatter
 			return if typeof node isnt 'object'
 			try
 				node.macro = @macros[node.name].instance {
-					node: node,
-					filename: @config.filename
-					winston: @config.winston
+					node: node
+					config: @config
 				}
 			catch e
 				console.error PatternParser.errorAtPos(@config.pattern, node.pos)
