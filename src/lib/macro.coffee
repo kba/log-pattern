@@ -1,58 +1,83 @@
 Fs = require 'fs'
 Path = require 'path'
 
-EMPTY_STRING = ''
-RE_SPLIT_COMMA = new RegExp('\s*,\s*')
-RE_SPLIT_EQUALS = new RegExp('\s*=\s*')
+module.exports = class MacroBuilder
 
-module.exports = class Macro
+	accepts_inner: false
+	requires_inner: false
 
-	can_inner: false
-	must_inner: false
+	accepts_arg: false
+	requires_arg: false
 
-	can_arg: false
-	must_arg: false
+	requires_filename: false
+	requires_winston: false
 
-	can_inner: false
-	must_inner: false
+	is_condition: false
+	
+	@allowedOpts = {
+		'name',
+		'macro_set'
+		'accepts_inner'
+		'requires_inner'
+		'accepts_arg'
+		'requires_arg'
+		'requires_filename'
+		'requires_winston'
+		'is_condition'
+		'setup'
+		'exec'
+		'check'
+	}
 
-	condition: false
-
-	must_module: false
-
-	throw_error: (msg) ->
-		throw new Error("#{@macro_set}/#{@name}: #{msg}")
-
-	setup: ->
-		# Nothing by default
-
-	@create: (opts={}) ->
+	constructor: (opts={}) ->
+		for opt of opts
+			continue if opt[0] is '_'
+			if opt not of MacroBuilder.allowedOpts
+				throw("Unknown property #{opt} for #{opts.macro_set}/#{opts.name}")
+		@[k] = v for k,v of opts
 		if not opts.name
 			throw new Error("Must define name for macro")
 		if not opts.macro_set
 			throw new Error("Must specify macro_set for macro '#{opts.name}'")
-		return (node, module) -> 
-			new Macro(opts, node, module)
+		if @requires_arg   then @accepts_arg = true
+		if @is_condition   then @requires_inner = true
+		if @requires_inner then @accepts_inner = true
+		if @is_condition and not @check
+			@throw_error("Must pass 'check' function for is_condition")
+		@setup or= @default_setup
 
-	constructor: (opts, node, @module) ->
-		@[k] = v for k,v of opts
-		if @must_arg      then @can_arg = true
-		if @conditional   then @must_inner = true
-		if @must_inner    then @can_inner = true
-		if not @can_arg     and node.arg            then @throw_error("takes no argument")
-		if @must_arg        and not node.arg        then @throw_error("requires argument")
-		if not @can_inner   and node.children       then @throw_error("takes no inner")
-		if @must_inner      and not node.children   then @throw_error("requires inner")
-		if @conditional     and not node.conditions then @throw_error("requires condition")
-		if not @conditional and node.conditions     then @throw_error("takes no condition")
-		if @must_module     and not @module         then @throw_error("requires module")
-		@arg = node.arg
-		@setup()
-		if @conditional and not opts.check
-			@throw_error("Must pass 'check' function for conditional")
-		if not opts.exec and not @precomputed
-			@throw_error("Must pass 'exec' function or set 'precomputed'")
+	instance: (opts={}) ->
+		if not opts.node
+			throw new Error("Must pass 'node' to Macro instance.")
+		if not @accepts_arg   and opts.node.arg            then @throw_error("takes no argument")
+		if @requires_arg      and not opts.node.arg        then @throw_error("requires argument")
+		if not @accepts_inner and opts.node.children       then @throw_error("takes no inner")
+		if @requires_inner    and not opts.node.children   then @throw_error("requires inner")
+		if @is_condition      and not opts.node.conditions then @throw_error("requires condition")
+		if not @is_condition  and opts.node.conditions     then @throw_error("takes no condition")
+		if @requires_filename and not opts.filename       then @throw_error("requires filename")
+		if @requires_winston and not opts.winston       then @throw_error("requires winston")
+		return new Macro(@, opts)
 
-	exec: (options) ->
+	throw_error: (msg) ->
+		throw new Error("#{@macro_set}/#{@name}: #{msg}")
+
+	default_setup: ->
+		# do nothing by default
+
+	default_exec: (options, inner) ->
 		return @precomputed if 'precomputed' of @
-		@throw_error "exec implemented"
+		@throw_error "exec not implemented"
+
+Macro = class Macro
+
+	constructor: (builder, opts) ->
+		@[k] = builder[k] for k of builder
+		@arg = opts.node.arg
+		@filename = opts.filename
+		@winston = opts.winston
+		@setup()
+		if @precomputed
+			@exec = builder.default_exec
+		else if not @exec
+			@throw_error("Must pass 'exec' function or set 'precomputed'")
