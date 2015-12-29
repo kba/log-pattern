@@ -49,6 +49,8 @@ _find_macro = (macros, str, i) ->
 _traverse = (type, tree, fn, ctx, args) ->
 	for node,idx in tree
 		if type is TRAVERSE_POST_ORDER
+			if node.conditions
+				_traverse type, node.conditions, fn, ctx, args
 			if node.children
 				_traverse type, node.children, fn, ctx, args
 			fn.apply ctx, [node, args]
