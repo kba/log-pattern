@@ -4,7 +4,7 @@
   "description": "Pattern-defined log formatter",
   "main": "lib/formatter.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "coffee test/test-macros.coffee",
     "prepublish": "make"
   },
   "repository": {
@@ -22,7 +22,10 @@
     "cycle": "^1.0.3",
     "dateformat": "^1.0.12",
     "find-package-json": "^1.0.0",
+    "uniq": "^1.0.1",
     "winston": "^2.1.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "tape": "^4.4.0"
+  }
 }
