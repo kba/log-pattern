@@ -10,7 +10,10 @@ PRESETS =
 
 module.exports = class PatternFormatter
 
-	constructor: (@config={}) ->
+	constructor: (opts={}) ->
+		if typeof opts is 'string'
+			opts = { pattern: opts }
+		@config = opts
 		if not @config.pattern
 			@config.preset or= 'default'
 			@config.pattern = PRESETS[@config.preset]
