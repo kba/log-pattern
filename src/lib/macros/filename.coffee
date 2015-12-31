@@ -56,7 +56,7 @@ module.exports.push
 	accepts_inner: true
 	requires_config: ['filename']
 	setup: ->
-		@arg or= '%name'
+		@arg or= '%fullname'
 		if @config.filename
 			@precomputed = Utils.replace_path_tokens(@config.filename, @arg)
 	exec : (options, inner) ->

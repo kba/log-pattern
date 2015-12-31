@@ -34,6 +34,7 @@ module.exports.pkgdir = (filename) ->
 
 module.exports.replace_path_tokens = (filename, arg) ->
 	tokens = Path.parse(filename)
+	tokens.fullname = filename
 	tokensOrder = Object.keys(tokens).sort((a,b) -> b.length - a.length)
 	for k in tokensOrder
 		arg = arg.replace('%'+k, tokens[k])

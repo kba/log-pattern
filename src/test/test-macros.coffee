@@ -37,7 +37,7 @@ test 'filename', (t) ->
 	t.equals fmt("%pkg{version}"), PACKAGE_JSON.version, 'filename/pkg{version}'
 	git_rev = fmt("%git-rev")
 	t.ok typeof git_rev is 'string' and git_rev.length == 7, "filename/git-rev"
-	t.equals fmt("%path"), Path.parse(__filename).name, 'filename/path'
+	t.equals fmt("%path"), __filename, 'filename/path = %path{%fullname}'
 	t.equals fmt("%path{%dir}"), Path.parse(__filename).dir, 'filename/path{%dir}'
 	t.equals fmt("%path{%dir/%name}(/foo/bar)"), '/foo/bar', 'filename/path{%dir/%name} with inner'
 	t.equals fmt("%short-path(/foo/bar/quux/bla)"), '/f/b/q/bla', 'short-path'
