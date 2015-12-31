@@ -75,7 +75,8 @@ Macro = class Macro
 		@arg = opts.node.arg
 		@config = opts.config
 		@setup()
-		if @precomputed
-			@exec = builder.default_exec
-		else if not @exec
-			@throw_error("Must pass 'exec' function or set 'precomputed'")
+		if not @exec
+			if @precomputed or @precomputed is ''
+				@exec = builder.default_exec
+			else
+				@throw_error("Must pass 'exec' function or set 'precomputed'")

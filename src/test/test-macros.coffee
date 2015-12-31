@@ -31,14 +31,17 @@ test 'env', (t) ->
 	t.equals fmt("%env{FOO}"), 'bar', 'env/env{FOO}'
 
 test 'filename', (t) ->
-	t.plan 6
+	t.plan 9
 	t.equals fmt("%pkg{name}"), PACKAGE_JSON.name, 'filename/pkg{name}'
 	t.equals fmt("%pkg{name}%pkg{version}"), PACKAGE_JSON.name + PACKAGE_JSON.version, 'filename/pkg{name} + pkg{version}'
 	t.equals fmt("%pkg{version}"), PACKAGE_JSON.version, 'filename/pkg{version}'
 	git_rev = fmt("%git-rev")
 	t.ok typeof git_rev is 'string' and git_rev.length == 7, "filename/git-rev"
 	t.equals fmt("%path"), Path.parse(__filename).name, 'filename/path'
-	t.equals fmt("%path{dir}"), Path.parse(__filename).dir, 'filename/path{dir}'
+	t.equals fmt("%path{%dir}"), Path.parse(__filename).dir, 'filename/path{%dir}'
+	t.equals fmt("%path{%dir/%name}(/foo/bar)"), '/foo/bar', 'filename/path{%dir/%name} with inner'
+	t.equals fmt("%short-path(/foo/bar/quux/bla)"), '/f/b/q/bla', 'short-path'
+	t.equals fmt("%short-path{-2}(/foo/bar/quux/bla)"), 'b/q/bla', 'short-path{-1}'
 
 test 'meta', (t) ->
 	t.plan 5

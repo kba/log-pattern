@@ -1,4 +1,4 @@
-PatternFormatter = require './formatter.coffee'
+PatternFormatter = require './formatter'
 PatternParser = require('./parser')
 Winston = require 'winston'
 util = require 'util'

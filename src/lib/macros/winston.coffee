@@ -7,7 +7,6 @@ module.exports.push
 module.exports.push
 	name: 'label'
 	exec: (options) ->
-		console.log arguments
 		options.label
 module.exports.push
 	name: 'LEVEL'
