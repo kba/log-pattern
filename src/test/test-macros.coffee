@@ -18,12 +18,14 @@ fmt = (pat, args...) ->
 	return patFmt.formatter().apply patFmt, args
 
 test 'string', (t) ->
-	t.plan 5
+	t.plan 7
 	t.equals fmt("%uc(foo)"), 'FOO', 'string/uc'
 	t.equals fmt("%lc(FOO)"), 'foo', 'string/lc'
 	t.equals fmt("%?()(FOO)"), '', 'string/? notok'
 	t.equals fmt("%?(something)(FOO)"), 'FOO', 'string/? ok'
 	t.equals fmt('%s(|foo|000|blafoobla)'), 'bla000bla', 's|||'
+	t.equals fmt("%pad{-10}(abc)"), 'abc       ', 'string/pad{-10}'
+	t.equals fmt("%pad{+10}(abc)"), '       abc', 'string/pad{10}'
 
 test 'colors', (t) ->
 	t.plan 6

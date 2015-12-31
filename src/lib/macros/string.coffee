@@ -1,3 +1,5 @@
+Pad = require 'pad'
+
 module.exports = []
 module.exports.push
 	name: 'uc'
@@ -10,6 +12,23 @@ module.exports.push
 	requires_inner: true
 	exec: (options, inner) ->
 		return inner.toLowerCase()
+
+module.exports.push
+	name: 'pad'
+	requires_arg: true
+	requires_inner: true
+	setup: ->
+		@_pad_opts =
+			colors: true
+			strip: true
+		@_amount = parseInt @arg
+		if @_amount > 0
+			@_pad_left = true
+		@_amount = Math.abs(@_amount)
+	exec: (options, inner) ->
+		if @_pad_left
+			return Pad(@_amount, inner, @_pad_opts)
+		return Pad(inner, @_amount, @_pad_opts)
 
 module.exports.push
 	name: '?'

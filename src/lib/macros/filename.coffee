@@ -57,6 +57,7 @@ module.exports.push
 		return Utils.pkgdir_rel inner if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+
 module.exports.push
 	name: 'path'
 	accepts_arg: true
