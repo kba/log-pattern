@@ -2,7 +2,9 @@ test = require('tape')
 PatternFormatter = require '../lib/formatter'
 Path = require 'path'
 Winston = require 'winston'
-PACKAGE_JSON = require('read-pkg-up').sync().pkg
+_pkg = require('read-pkg-up').sync()
+PACKAGE_JSON = _pkg.pkg
+PACKAGE_DIR = Path.dirname(_pkg.path)
 
 fmt = (pat, args...) -> 
 	patFmt = new PatternFormatter(pattern: pat, filename: __filename, winston: Winston)
@@ -32,7 +34,7 @@ test 'env', (t) ->
 	t.equals fmt("%env{FOO}"), 'bar', 'env/env{FOO}'
 
 test 'filename', (t) ->
-	t.plan 9
+	t.plan 10
 	t.equals fmt("%pkg{name}"), PACKAGE_JSON.name, 'filename/pkg{name}'
 	t.equals fmt("%pkg{name}%pkg{version}"), PACKAGE_JSON.name + PACKAGE_JSON.version, 'filename/pkg{name} + pkg{version}'
 	t.equals fmt("%pkg{version}"), PACKAGE_JSON.version, 'filename/pkg{version}'
@@ -43,6 +45,7 @@ test 'filename', (t) ->
 	t.equals fmt("%path{%dir/%name}(/foo/bar)"), '/foo/bar', 'filename/path{%dir/%name} with inner'
 	t.equals fmt("%short-path(/foo/bar/quux/bla)"), '/f/b/q/bla', 'short-path'
 	t.equals fmt("%short-path{-2}(/foo/bar/quux/bla)"), 'b/q/bla', 'short-path{-1}'
+	t.equals fmt("%path{%-pkgdir}"), Path.relative(PACKAGE_DIR, __filename), 'short-path{-1}'
 
 test 'meta', (t) ->
 	t.plan 5

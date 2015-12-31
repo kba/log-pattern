@@ -43,7 +43,7 @@ module.exports.push
 	accepts_arg: true
 	requires_config: ['filename']
 	setup: ->
-		if @arg
+		if @config.filename
 			@precomputed = Utils.pkgdir(@config.filename)
 	exec: (options, inner) ->
 		return Utils.pkgdir(inner) if inner
