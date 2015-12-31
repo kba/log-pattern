@@ -44,4 +44,4 @@ module.exports.push
 	exec: (options, inner) ->
 		delim = inner[0]
 		[to_replace, replace_with, inner] = inner.substr(1).split(delim)
-		return inner.replace(to_replace, replace_with)
+		return inner.replace(new RegExp(to_replace), replace_with)
