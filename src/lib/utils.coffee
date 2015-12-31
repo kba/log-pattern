@@ -55,12 +55,11 @@ Utils.gitrev = Memoize (filename) ->
 
 Utils.shortenPath = Memoize (filename, arg) ->
 	shortened = []
-	segments = Path.dirname(filename).split(Path.sep)
+	segments = filename.split(Path.sep)
 	if typeof arg isnt 'undefined'
 		segments = segments.slice(parseInt arg)
 	for v in segments
 		shortened.push v[0]
-	shortened.push Path.basename filename
 	return shortened.join(Path.sep)
 
 Utils.pkgjson = Memoize (filename) ->

@@ -53,8 +53,8 @@ test 'filename', (t) ->
 	t.equals fmt("%path"), __filename, 'filename/path = %path{%fullname}'
 	t.equals fmt("%path{%dir}"), Path.parse(__filename).dir, 'filename/path{%dir}'
 	t.equals fmt("%path{%dir/%name}(/foo/bar)"), '/foo/bar', 'filename/path{%dir/%name} with inner'
-	t.equals fmt("%short-path(/foo/bar/quux/bla)"), '/f/b/q/bla', 'short-path'
-	t.equals fmt("%short-path{-2}(/foo/bar/quux/bla)"), 'b/q/bla', 'short-path{-1}'
+	t.equals fmt("%short-path(/foo/bar/quux/bla)"), '/f/b/q/b', 'short-path'
+	t.equals fmt("%short-path{-2}(/foo/bar/quux/bla)"), 'q/b', 'short-path{-1}'
 	t.equals fmt("%-pkgdir"), Path.relative(PACKAGE_DIR, __dirname), 'filename/-pkgdir'
 
 test 'meta', (t) ->
