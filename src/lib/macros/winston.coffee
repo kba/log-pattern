@@ -23,21 +23,15 @@ module.exports.push
 module.exports.push
 	name: 'levelColor'
 	requires_inner: yes
-	requires_config: ['winston']
 	accepts_arg: yes
 	setup : ->
 		if @arg
-			def = Utils.splitCommaEquals @arg
-			for level,styles of def
-				def[level] = Utils.parseColor styles
-			@_colorize = (level, inner) ->
-				return inner unless level of def
-				return def[level] inner
-		else if 'winston' of @config
-			@_colorize = @config.winston.config.colorize
+			@_colorize = Utils.colorizeFunction Utils.splitCommaEquals @arg
+		else if 'levelColors' of @config and typeof @config.levelColors is 'object'
+			@_colorize = Utils.colorizeFunction @config.levelColors
+		else if 'levelColors' of @config and typeof @config.levelColors is 'function'
+			@_colorize = @config.levelColor
 		else 
-			@throw_error "No level-color mapping!"
+			@throw_error "No level-color mapping. Either pass 'levelColor' function or define mapping."
 	exec: (options, inner) ->
-		if 'level' of options
-			return @_colorize options.level, inner
-		return inner
+		return @_colorize options.level, inner

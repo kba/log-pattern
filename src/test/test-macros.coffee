@@ -7,7 +7,14 @@ PACKAGE_JSON = _pkg.pkg
 PACKAGE_DIR = Path.dirname(_pkg.path)
 
 fmt = (pat, args...) -> 
-	patFmt = new PatternFormatter(pattern: pat, filename: __filename, winston: Winston)
+	patFmt = new PatternFormatter(
+		pattern: pat
+		filename: __filename
+		levelColors: Winston.config.npm.colors
+		styles: {
+			'foo-style': 'red bold underline'
+		}
+	)
 	return patFmt.formatter().apply patFmt, args
 
 test 'string', (t) ->
@@ -18,11 +25,14 @@ test 'string', (t) ->
 	t.equals fmt("%?(something)(FOO)"), 'FOO', 'string/? ok'
 	t.equals fmt('%s(|foo|000|blafoobla)'), 'bla000bla', 's|||'
 
-test 'chalk', (t) ->
-	t.plan 3
+test 'colors', (t) ->
+	t.plan 6
 	t.equals fmt("%chalk{red}(red)"), '\x1b[31mred\x1b[39m', 'colors/chalk{red}'
+	t.equals fmt("%C{red}(red)"), '\x1b[31mred\x1b[39m', 'colors/C{red} [alias]'
 	t.equals fmt("%chalk{red bold}(red)"), '\x1b[1m\x1b[31mred\x1b[39m\x1b[22m', 'colors/chalk{red bold}'
 	t.equals fmt("%chalk{red bold bold}(red)"), '\x1b[1m\x1b[31mred\x1b[39m\x1b[22m', 'colors/chalk{red bold}'
+	t.equals fmt("%style{foo-style}(abc)"), '\x1b[1m\x1b[31m\x1b[4mabc\x1b[24m\x1b[39m\x1b[22m', 'colors/style{foo-style}'
+	t.equals fmt("%@{foo-style}(abc)"), '\x1b[1m\x1b[31m\x1b[4mabc\x1b[24m\x1b[39m\x1b[22m', 'colors/@{foo-style} [alias]'
 
 test 'date', (t) ->
 	t.plan 1
@@ -45,7 +55,7 @@ test 'filename', (t) ->
 	t.equals fmt("%path{%dir/%name}(/foo/bar)"), '/foo/bar', 'filename/path{%dir/%name} with inner'
 	t.equals fmt("%short-path(/foo/bar/quux/bla)"), '/f/b/q/bla', 'short-path'
 	t.equals fmt("%short-path{-2}(/foo/bar/quux/bla)"), 'b/q/bla', 'short-path{-1}'
-	t.equals fmt("%path{%-pkgdir}"), Path.relative(PACKAGE_DIR, __filename), 'short-path{-1}'
+	t.equals fmt("%-pkgdir"), Path.relative(PACKAGE_DIR, __dirname), 'filename/-pkgdir'
 
 test 'meta', (t) ->
 	t.plan 5
