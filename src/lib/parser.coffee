@@ -1,3 +1,4 @@
+require('string.prototype.startswith')
 util = require 'util'
 
 MACRO_SIGIL = '%'
