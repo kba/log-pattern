@@ -1,5 +1,6 @@
 test = require('tape')
 PatternFormatter = require '../lib/formatter'
+DateFormat = require 'dateformat'
 Path = require 'path'
 Winston = require 'winston'
 _pkg = require('read-pkg-up').sync()
@@ -38,7 +39,8 @@ test 'colors', (t) ->
 
 test 'date', (t) ->
 	t.plan 1
-	t.equals fmt("%date{yyyy}"), '2015', 'date/date{YYYY}'
+	year = DateFormat(new Date(), 'yyyy')
+	t.equals fmt("%date{yyyy}"), year, 'date/date{YYYY}'
 
 test 'env', (t) ->
 	t.plan 1
