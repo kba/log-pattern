@@ -1,4 +1,3 @@
-require('string.prototype.startswith')
 util = require 'util'
 
 MACRO_SIGIL = '%'
@@ -40,7 +39,7 @@ Exception =
 _find_macro = (macros, str, i) ->
 	if macros
 		for macro in macros
-			return macro if str.substr(i).startsWith macro
+			return macro if str.substr(i).indexOf(macro) == 0
 		throw Exception.unknown_macro(str, i)
 	j = i
 	while j++ < str.length
