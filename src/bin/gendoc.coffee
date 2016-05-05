@@ -10,21 +10,24 @@ for name_or_alias, macro of require('../lib/macros')
 	done[macro.name] = true
 	by_set[macro.macro_set] or= []
 	out = ''
-	out += "\n#### #{name_or_alias}\n"
+	out += "\n#### #{name_or_alias}"
 	# out += "\n#### #{macro.name}\n"
 	if macro.alias
 		for alias in macro.alias
-			out += "#### #{alias}\n"
+			out += " / #{alias}"
+	out += "\n\n"
+	out += "* Argument: #{
+		if macro.requires_arg   then "**REQUIRED**" else if macro.accepts_arg   then "*ALLOWED*" else ":x:"
+		}\n"
+	out += "* Inner Text: #{
+		if macro.requires_inner then "**REQUIRED**" else if macro.accepts_inner then "*ALLOWED*" else ":x:"
+	}\n"
 	out += "\n"
+	if macro.requires_config and macro.requires_config.length > 0
+		out += "* Configuration:\n"
+		out += "  * #{v}\n" for v in macro.requires_config
 	if macro.description
-		out += "#{macro.description}\n\n"
-	if macro.example
-		out += "\n```\n#{macro.example}\n```\n\n"
-	out += "* Requires config: #{   if macro.requires_config then ":white_check_mark:" else ":x:"}\n"
-	out += "* Takes argument: #{    if macro.requires_arg    then ":white_check_mark:" else ":x:"}\n"
-	out += "* Requires argument: #{ if macro.requires_arg    then ":white_check_mark:" else ":x:"}\n"
-	out += "* Accepts inner: #{     if macro.accepts_inner   then ":white_check_mark:" else ":x:"}\n"
-	out += "* Requires inner: #{    if macro.requires_inner  then ":white_check_mark:" else ":x:"}\n"
+		out += "\n#{macro.description}\n"
 	by_set[macro.macro_set].push out
 
 out = ''

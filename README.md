@@ -2,20 +2,14 @@ log-pattern
 -----------
 Formatter for logging output, targeted at winston
 
+<!-- :GenTocGFM -->
 * [Description](#description)
 * [Installation](#installation)
 * [Usage](#usage)
 * [Macros](#macros)
 	* [colors](#colors)
-		* [chalk](#chalk)
-		* [C](#c)
-		* [style](#style)
-		* [@](#)
-	* [colors](#colors-1)
-		* [chalk](#chalk-1)
-		* [C](#c-1)
-		* [style](#style-1)
-		* [@](#-1)
+		* [chalk / C](#chalk--c)
+		* [style / @](#style--)
 	* [date](#date)
 		* [date](#date-1)
 	* [env](#env)
@@ -34,14 +28,14 @@ Formatter for logging output, targeted at winston
 		* [uc](#uc)
 		* [lc](#lc)
 		* [pad](#pad)
-		* [?](#-2)
+		* [?](#)
 		* [s](#s)
 	* [winston](#winston)
 		* [level](#level)
 		* [label](#label)
 		* [LEVEL](#level-1)
 		* [message](#message)
-		* [!](#-3)
+		* [!](#-1)
 		* [levelColor](#levelcolor)
 
 ## Description
@@ -64,212 +58,215 @@ console.log(fmt.format({filename: '/bar/quux'}))
 ```
 
 ## Macros
+<!-- :r!coffee src/bin/gendoc.coffee -->
 
 ### colors
 
-#### chalk
-#### C
+#### chalk / C
 
-Renders text in ANSI color with [chalk](https://github.com/chalk/chalk).
+* Argument: **REQUIRED**
+* Inner Text: **REQUIRED**
 
+
+Renders text in ANSI color with [chalk](https://github.com/chalk/chalk).'
 
 ```
-%chalk{COLOR}(INNER)
-%@{COLOR}(INNER)
+%chalk{red}(some text)
+%@{blue bold}(bla)
 ```
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+#### style / @
 
-#### style
-#### @
+* Argument: **REQUIRED**
+* Inner Text: **REQUIRED**
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Configuration:
+  * styles
+
+Style the inner text using [chalk](https://github.com/chalk/chalk), but
+referring to named styles defined in the config.
+
+```js
+patFmt = LogPattern.PatternFormaater({
+	styles:{
+		'date': 'red bold',
+		'message': 'green underline'
+	}
+});
+fmt = patFmt.formatter({'pattern': '%style{date}(%date) ---- %@{message}(foo!)'});
+fmt()
+// -> "01:02:03.432 - foo!"
+//    |____________| |   |
+//       green     | |   |
+//     underline   |_|   |
+//               default |
+//                   |___|
+//                    red
+//                    bold
+```
 
 ### date
 
 #### date
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: *ALLOWED*
+* Inner Text: :x:
+
+
+Return the current date, formatted by [dateformat](https://github.com/felixge/node-dateformat).
+
+```
+%date{yyyy}
+// -> "2016"
+%date
+// -> "01:02:03.123"
+```
+
+The argument defaults to `HH:mm:ss.l`
 
 ### env
 
 #### config
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: **REQUIRED**
+* Inner Text: :x:
+
 
 #### env
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: **REQUIRED**
+* Inner Text: :x:
+
 
 ### filename
 
 #### pkg
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: **REQUIRED**
+* Inner Text: :x:
+
 
 #### short-path
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :x:
+* Argument: *ALLOWED*
+* Inner Text: *ALLOWED*
+
 
 #### git-rev
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: :x:
+* Inner Text: :x:
+
 
 #### pkgdir
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: *ALLOWED*
+* Inner Text: :x:
+
 
 #### -pkgdir
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: *ALLOWED*
+* Inner Text: :x:
+
 
 #### path
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :x:
+* Argument: *ALLOWED*
+* Inner Text: *ALLOWED*
+
 
 ### meta
 
 #### meta
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: *ALLOWED*
+* Inner Text: :x:
+
 
 ### string
 
 #### uc
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Argument: :x:
+* Inner Text: **REQUIRED**
+
+
+Converts a string to upper case.
 
 #### lc
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Argument: :x:
+* Inner Text: **REQUIRED**
+
+
+Converts a string to lower case.
 
 #### pad
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Argument: **REQUIRED**
+* Inner Text: **REQUIRED**
+
+
+Pads a string with spaces or truncates it to fit into a fixed length field.
+
+Uses [pad](http://github.com/wdavidw/node-pad).
 
 #### ?
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Argument: :x:
+* Inner Text: **REQUIRED**
+
+
+** CONDITION **
+
+Matches if the inner text is not an empty string or does not only contain whitespace.
 
 #### s
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Argument: :x:
+* Inner Text: **REQUIRED**
+
+
+```
+%s(|foo|bar| blafoobla) -> blabarbla
+```
 
 ### winston
 
 #### level
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: :x:
+* Inner Text: :x:
+
 
 #### label
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: :x:
+* Inner Text: :x:
+
 
 #### LEVEL
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: :x:
+* Inner Text: :x:
+
 
 #### message
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: :x:
+* Inner Text: :x:
+
 
 #### !
 
-* Requires config: :white_check_mark:
-* Takes argument: :white_check_mark:
-* Requires argument: :white_check_mark:
-* Accepts inner: :x:
-* Requires inner: :x:
+* Argument: **REQUIRED**
+* Inner Text: :x:
+
 
 #### levelColor
 
-* Requires config: :white_check_mark:
-* Takes argument: :x:
-* Requires argument: :x:
-* Accepts inner: :white_check_mark:
-* Requires inner: :white_check_mark:
+* Argument: *ALLOWED*
+* Inner Text: **REQUIRED**
+
 
