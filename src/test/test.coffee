@@ -1,6 +1,6 @@
 Winston = require 'winston'
-FmtParser = require '../src/lib/parser'
-PatternFormatter = require '../src/lib/formatter'
+FmtParser = require '../lib/parser'
+PatternFormatter = require '../lib/formatter'
 util = require('util')
 macros =
 	a: 'foo'

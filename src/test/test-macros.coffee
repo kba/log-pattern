@@ -7,7 +7,7 @@ _pkg = require('read-pkg-up').sync()
 PACKAGE_JSON = _pkg.pkg
 PACKAGE_DIR = Path.dirname(_pkg.path)
 
-fmt = (pat, args...) -> 
+fmt = (pat, args...) ->
 	patFmt = new PatternFormatter(
 		pattern: pat
 		filename: __filename
@@ -64,8 +64,10 @@ test 'filename', (t) ->
 test 'meta', (t) ->
 	t.plan 5
 	t.equals fmt("%meta{colors=false}", meta: {foo:42}), '{ foo: 42 }', 'meta/meta{colors=false}'
-	t.equals fmt("%meta{colors=false,inspect=false}", meta: {foo:42}), '{\n  "foo": 42\n}', 'meta/meta{colors=false,inspect=false}'
-	t.equals fmt("%meta{inspect=false,indent=4}", meta: {foo:42}), '{\n    "foo": 42\n}', 'meta/meta{colors=false,inspect=false,indent=4}'
+	t.equals fmt("%meta{colors=false,inspect=false}", meta: {foo:42}),
+	'{\n  "foo": 42\n}', 'meta/meta{colors=false,inspect=false}'
+	t.equals fmt("%meta{inspect=false,indent=4}", meta: {foo:42}),
+	'{\n    "foo": 42\n}', 'meta/meta{colors=false,inspect=false,indent=4}'
 	cyclic = {'foo':'bar'}
 	cyclic.bar = cyclic
 	t.throws (-> fmt "%meta{decycle=0}", meta: cyclic), /TypeError.*circular/, 'meta/meta{decycle=0} notok'

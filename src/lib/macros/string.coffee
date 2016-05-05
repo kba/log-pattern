@@ -3,18 +3,29 @@ Pad = require 'pad'
 module.exports = []
 module.exports.push
 	name: 'uc'
+	description: '''
+Converts a string to upper case.
+'''
 	requires_inner: true
 	exec: (options, inner) ->
 		return inner.toUpperCase()
 
 module.exports.push
 	name: 'lc'
+	description: '''
+Converts a string to lower case.
+'''
 	requires_inner: true
 	exec: (options, inner) ->
 		return inner.toLowerCase()
 
 module.exports.push
 	name: 'pad'
+	description: '''
+Pads a string with spaces or truncates it to fit into a fixed length field.
+
+Uses [pad](http://github.com/wdavidw/node-pad).
+'''
 	requires_arg: true
 	requires_inner: true
 	setup: ->
@@ -32,6 +43,11 @@ module.exports.push
 
 module.exports.push
 	name: '?'
+	description: '''
+** CONDITION **
+
+Matches if the inner text is not an empty string or does not only contain whitespace.
+'''
 	is_condition: true
 	check: (options, inner) ->
 		return not /^\s*$/.test(inner)
@@ -40,6 +56,11 @@ module.exports.push
 # %s(|foo|bar| blafoobla) -> blabarbla
 module.exports.push
 	name: 's'
+	description: '''
+```
+%s(|foo|bar| blafoobla) -> blabarbla
+```
+'''
 	requires_inner: true
 	exec: (options, inner) ->
 		delim = inner[0]

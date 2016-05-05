@@ -26,7 +26,6 @@ module.exports.push
 		return @precomputed if @precomputed
 		return @config.empty_string
 
-
 module.exports.push
 	name: 'git-rev'
 	setup: ->

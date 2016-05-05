@@ -16,6 +16,7 @@ module.exports = class MacroBuilder
 	@allowedOpts = {
 		'name'
 		'alias'
+		'description'
 		'macro_set'
 		'accepts_inner'
 		'requires_inner'
