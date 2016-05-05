@@ -13,6 +13,9 @@ module.exports.push
 		return Utils.pkgjson(inner)[@arg] if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+	description: '''
+	A value from the first package.json file above the filename in the file tree.
+	'''
 
 module.exports.push
 	name: 'short-path'
@@ -25,6 +28,14 @@ module.exports.push
 		return Utils.shortenPath(inner, @arg) if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+	description: '''
+	Turns the directory component of a filename into a shortened version:
+
+	```
+	%short-path(/foo/bar/baz/quux)
+	// -> "f/b/b"
+	```
+	'''
 
 module.exports.push
 	name: 'git-rev'
@@ -35,6 +46,9 @@ module.exports.push
 		return Utils.gitrev(inner) if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+	description: '''
+	The shorthand SHA of the last git commit of the filename.
+	'''
 
 module.exports.push
 	name: 'pkgdir'
@@ -46,6 +60,9 @@ module.exports.push
 		return Utils.pkgdir(inner) if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+	description: '''
+	Absolute path of the first parent directory of the filename that contains a `package.json`.
+	'''
 
 module.exports.push
 	name: '-pkgdir'
@@ -56,6 +73,9 @@ module.exports.push
 		return Utils.pkgdir_rel inner if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+	description: '''
+	Relative path of the first parent directory of the filename that contains a `package.json`.
+	'''
 
 module.exports.push
 	name: 'path'
@@ -69,3 +89,21 @@ module.exports.push
 		return Utils.replace_path_tokens(inner, @arg) if inner
 		return @precomputed if @precomputed
 		return @config.empty_string
+	description: '''
+	Replaces the filename with tokens passed as arguments, as returned by
+	[`path.parse`](https://nodejs.org/api/path.html#path_path_parse_path)
+
+	```
+	// {filename: '/foo/bar/baz/quux.ext'}
+	%path(%fullname)
+	// -> "/foo/bar/baz/quux.ext"
+	%path(%base)
+	// -> "quux.ext"
+	%path(%ext)
+	// -> ".ext"
+	%path(%name)
+	// -> "quux"
+	%path(%dir)
+	// -> "/foo/bar/baz"
+	```
+	'''

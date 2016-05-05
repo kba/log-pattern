@@ -16,4 +16,3 @@ for mod_name in Fs.readdirSync Path.join(__dirname)
 		if IsArray macro.alias
 			for alias in macro.alias
 				module.exports[alias] = macroBuilder
-

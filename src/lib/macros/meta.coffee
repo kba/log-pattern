@@ -40,8 +40,23 @@ module.exports.push
 				msg = Util.inspect(obj, inspect_opts)
 				if @_config.indent > 0
 					if /\n/.test(msg)
-					  msg = ">\n" + msg.replace(/^/mg, "  ")
+						msg = ">\n" + msg.replace(/^/mg, "  ")
 				return msg
 			if @_config.indent > 0
 				return JSON.stringify(obj, null, @_config.indent)
 			return JSON.stringify(obj)
+	description: '''
+	Handles a `meta` element of the object passed to the formatter function to pretty print it.
+
+	Can be configured with key-value pairs passed as argument.
+
+	```
+	// {meta:{foo:{bar:42}}}
+	%meta{decycle=true,colors=true}
+	// {
+	//   foo: {
+	//     bar: 42
+	//   }
+	// }
+	```
+	'''
