@@ -1,6 +1,6 @@
 {
   "name": "log-pattern",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Pattern-defined log formatter",
   "main": "lib/index.js",
   "scripts": {
