@@ -37,9 +37,11 @@ test 'colors', (t) ->
 	t.equals fmt("%style{foo-style}(abc)"), '\x1b[1m\x1b[31m\x1b[4mabc\x1b[24m\x1b[39m\x1b[22m', 'colors/style{foo-style}'
 	t.equals fmt("%@{foo-style}(abc)"), '\x1b[1m\x1b[31m\x1b[4mabc\x1b[24m\x1b[39m\x1b[22m', 'colors/@{foo-style} [alias]'
 
-test 'date', (t) ->
-	t.plan 1
+test.only 'date', (t) ->
+	t.plan 2
 	year = DateFormat(new Date(), 'yyyy')
+	date = DateFormat(new Date(), 'HH:MM:ss.l')
+	t.equals fmt("%date").substr(0,8), date.substr(0,8), 'date/default'
 	t.equals fmt("%date{yyyy}"), year, 'date/date{YYYY}'
 
 test 'env', (t) ->

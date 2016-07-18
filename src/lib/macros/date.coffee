@@ -9,7 +9,7 @@ module.exports.push
 		# tzoffset = (new Date).getTimezoneOffset() * 60000
 		# return new Date(Date.now() - tzoffset).toISOString().substring 11, 23
 	setup: ->
-		@arg or= 'HH:mm:ss.l'
+		@arg or= 'HH:MM:ss.l'
 	exec: (options) ->
 		return DateFormat(new Date(), @arg)
 	description: '''
