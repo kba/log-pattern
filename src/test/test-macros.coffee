@@ -85,3 +85,7 @@ test 'winston', (t) ->
 	t.equal fmt("%!{foo}", foo: 'bar'), 'bar', 'winston/!{message}'
 	t.equal fmt("%levelColor(foo)", level: 'debug'), '\x1b[34mfoo\x1b[39m', 'winston/levelColor (@winston)'
 	t.equal fmt("%levelColor{debug=green}(foo)", level: 'debug'), '\x1b[32mfoo\x1b[39m', 'winston/levelColor (@arg)'
+
+test 'process', (t) ->
+	t.plan 1
+	t.equal fmt('%pid'), "#{process.pid}", 'process/pid'
