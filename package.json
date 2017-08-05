@@ -28,7 +28,6 @@
     "uniq": "^1.0.1"
   },
   "devDependencies": {
-    "tape": "^4.4.0",
-    "winston": "^2.1.1"
+    "tape": "^4.4.0"
   }
 }

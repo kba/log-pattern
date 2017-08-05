@@ -12,7 +12,7 @@ dump = (obj) ->
 	}
 
 # console.log require.main.children
-patfmt = new PatternFormatter (
+patfmt = new PatternFormatter(
 	#
 	# pattern: "[%?(%level)([%level])] %chalk{red}(%env{HOME}) %date %path{name} %!{level} %meta"
 	# pattern: "%?(%level)([%level])"

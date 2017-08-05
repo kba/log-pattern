@@ -40,7 +40,10 @@ _find_macro = (macros, str, i) ->
 	if macros
 		for macro in macros
 			return macro if str.substr(i).indexOf(macro) == 0
-		throw Exception.unknown_macro(str, i)
+		if process.env.LOGPATTERN_FORBID_UNKNOWN
+			throw Exception.unknown_macro(str, i)
+		else
+			return ''
 	j = i
 	while j++ < str.length
 		break unless ALLOWED_MACRO_CHARS.test str[j]
