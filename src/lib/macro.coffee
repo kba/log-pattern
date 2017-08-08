@@ -56,7 +56,7 @@ module.exports = class MacroBuilder
 		if @requires_inner    and not opts.node.children   then @throw_error("requires inner")
 		if @is_condition      and not opts.node.conditions then @throw_error("requires condition")
 		if not @is_condition  and opts.node.conditions     then @throw_error("takes no condition")
-		for config_opt in @requires_config
+		for config_opt in Array.from(@requires_config)
 			if not opts.config[config_opt] then @throw_error("requires config.#{config_opt}")
 		return new Macro(@, opts)
 

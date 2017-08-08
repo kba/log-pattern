@@ -4,7 +4,7 @@ Chalk = require 'chalk'
 PatternParser = require './parser'
 DefaultMacros = require './macros'
 
-PRESETS = 
+PRESETS =
 	'default': '[%level] %message %meta'
 	'colored': '[%levelColor(%uc(%level))] - %date - %path{name} %message'
 
@@ -22,7 +22,9 @@ module.exports = class PatternFormatter
 
 	_loadMacros : ->
 		@macros = DefaultMacros
-		@macros[macro.name] = macro for macro in @config.macros?
+		if @config.macros
+			for macro in @config.macros
+				@macros[macro.name] = macro
 		return @macros
 
 	_loadPattern: (patfmt) ->
