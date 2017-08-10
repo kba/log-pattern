@@ -21,7 +21,9 @@ module.exports = class PatternFormatter
 		@_loadPattern()
 
 	_loadMacros : ->
-		@macros = DefaultMacros
+		@macros = {}
+		unless @config.noDefaultMacros
+			Object.assign(@macros, DefaultMacros)
 		if @config.macros
 			for macro in @config.macros
 				@macros[macro.name] = macro

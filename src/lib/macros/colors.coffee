@@ -8,11 +8,11 @@ module.exports.push
 	requires_arg: yes
 	setup: ->
 		try
-			@_colorize = Utils.parseColor(@arg)
+			return @_colorize = Utils.parseColor(@arg)
 		catch e
-			@throw_error(e)
+			return @throw_error(e)
 	exec: (options, inner) ->
-		@_colorize inner
+		return @_colorize inner
 	description: '''
 Renders text in ANSI color with [chalk](https://github.com/chalk/chalk).'
 
@@ -29,9 +29,9 @@ module.exports.push
 	requires_inner: yes
 	requires_config: ['styles']
 	setup: ->
-		@_colorize = Utils.colorizeFunction @config.styles
+		return @_colorize = Utils.colorizeFunction @config.styles
 	exec: (options, inner) ->
-		@_colorize @arg, inner
+		return @_colorize @arg, inner
 	description: '''
 Style the inner text using [chalk](https://github.com/chalk/chalk), but
 referring to named styles defined in the config.
